@@ -1,8 +1,22 @@
+Tentu, saya mengerti. Anda ingin halaman web tersebut secara otomatis menampilkan versi *desktop* saat dibuka di ponsel, sehingga pengguna tidak perlu mencarinya di menu browser.
+
+Ini dapat dilakukan dengan mengubah satu baris kode di dalam tag `<head>` pada HTML Anda, yaitu pada tag `<meta name="viewport">`.
+
+Saat ini, kodenya adalah:
+`<meta name="viewport" content="width=device-width, initial-scale=1.0">`
+
+Pengaturan ini memberi tahu browser ponsel untuk menyesuaikan lebar situs dengan lebar layar ponsel (tampilan *mobile* standar).
+
+Untuk memaksanya menampilkan versi *desktop*, kita akan mengubahnya menjadi lebar tetap yang lebih besar, misalnya `1200` piksel, yang sesuai dengan lebar minimum tabel pada desain Anda.
+
+Berikut adalah kode HTML lengkap yang telah diperbaiki dengan perubahan tersebut. Cukup ganti seluruh file HTML Anda dengan kode di bawah ini.
+
+```html
 <!DOCTYPE html>
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=1200">
     <title>Sistem Informasi Peminjaman Barang - MS Redelong</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
@@ -66,7 +80,6 @@
         #login-form select, #login-form input { padding: 14px; border-radius: 8px; border: 1px solid #444; font-size: 16px; background-color: #2c3e50; color: var(--white-color); transition: border-color 0.3s, box-shadow 0.3s; }
         #login-form select:focus, #login-form input:focus { outline: none; border-color: var(--secondary-color); box-shadow: 0 0 0 3px rgba(247, 183, 49, 0.25); }
         
-        /* === PERUBAHAN CSS: Menyesuaikan Tombol Login & Panduan === */
         #login-form button, #login-form .btn-panduan {
             display: block;
             width: 100%;
@@ -195,13 +208,12 @@
         td .table-photo { width: 70px; height: 70px; object-fit: cover; border-radius: 8px; cursor: pointer; transition: transform 0.2s; }
         td .table-photo:hover { transform: scale(3.5); z-index: 20; border: 2px solid white; box-shadow: 0 5px 15px rgba(0,0,0,0.2); position: relative; }
         
-        /* === PERUBAHAN CSS: Perbaikan Kolom Aksi/ID === */
         td .actions { 
             display: flex; 
             flex-direction: column; 
             gap: 5px; 
             align-items: flex-start;
-            margin-top: 5px; /* Memberi jarak antara ID dan tombol */
+            margin-top: 5px;
         }
         .actions button, .actions select { width: 100%; box-sizing: border-box; }
         .actions button { padding: 5px 10px; border: none; border-radius: 5px; cursor: pointer; color: white; font-size: 12px; font-weight: 500; }
@@ -237,8 +249,8 @@
             transform: translateY(-2px);
             opacity: 0.9;
         }
-        .btn-db { background-color: #0F9D58; } /* Google Sheets Green */
-        .btn-drive { background-color: #FFBA00; color: var(--dark-color) !important; } /* Google Drive Yellow */
+        .btn-db { background-color: #0F9D58; } 
+        .btn-drive { background-color: #FFBA00; color: var(--dark-color) !important; } 
         .btn-info { background-color: var(--info-color); }
         .btn-primary { background-color: var(--primary-color); }
         
@@ -251,14 +263,13 @@
         .modal-controls { margin-top: 20px; display: flex; gap: 10px; justify-content: flex-end; }
         .modal-controls button { padding: 10px 20px; border-radius: 6px; border: none; cursor: pointer; font-weight: 500; }
         
-        /* === KODE BARU DITAMBAHKAN DI SINI === */
         #camera-feed {
             width: 100%;
-            height: auto; /* Menjaga rasio aspek video */
+            height: auto;
             display: block;
-            border-radius: 8px; /* Menyamakan desain dengan elemen lain */
-            margin-bottom: 15px; /* Memberi jarak ke tombol */
-            background-color: #000; /* Latar belakang hitam saat memuat */
+            border-radius: 8px;
+            margin-bottom: 15px;
+            background-color: #000;
         }
         
         #loader-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background-color: rgba(10, 20, 40, 0.85); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); display: flex; flex-direction: column; justify-content: center; align-items: center; z-index: 9999; opacity: 0; transition: opacity 0.5s ease-in-out; pointer-events: none; }
@@ -489,7 +500,6 @@
             }
         }
         
-        // === PERUBAHAN JS: Logika Progress Bar Lebih Akurat ===
         async function loadFaceApiModels(startProgress, endProgress, statusText) {
             if (state.faceApiLoaded) {
                 loaderManager.update(endProgress, statusText);
@@ -557,7 +567,6 @@
             loaderManager.show("Mengautentikasi...");
             await new Promise(r => setTimeout(r, 200));
             
-            // Model AI dimuat dengan progress 10% -> 30%
             await loadFaceApiModels(10, 30, "Mengunduh model AI...");
             
             $('#welcome-message').textContent = `Selamat Datang, ${role.charAt(0).toUpperCase() + role.slice(1)}`;
@@ -568,7 +577,7 @@
             } else { // pengawas & pengunjung
                 $('#pengawas-features').classList.toggle('hidden', role !== 'pengawas');
                 loaderManager.update(35, "Menghubungi server...");
-                await fetchAndRenderData(); // Fungsi ini akan menyelesaikan progress bar
+                await fetchAndRenderData();
                 switchView('app');
             }
         }
@@ -631,7 +640,6 @@
                 ${pageData.map(row => `<tr data-id="${row.ID}">${headers.map(header => {
                     let value = row[header];
                     
-                    // === PERUBAHAN JS: Menghapus 00:00:00 dari Tanggal ===
                     const isDateField = header === 'Tanggal' || header === 'Tanggal Pengembalian';
                     if (isDateField && value && typeof value === 'string') {
                         value = value.split(' ')[0];
@@ -640,13 +648,11 @@
                     if (header.toLowerCase().includes('foto')) { return `<td>${value ? `<img src="${value}" class="table-photo" alt="Foto">` : ''}</td>`; }
                     if (header === 'Penilaian Pengawas' && state.userRole === 'pengawas') { return `<td><select class="rating-select" data-id="${row.ID}"><option value="">-- Beri Nilai --</option><option value="Baik" ${value==='Baik'?'selected':''}>Baik</option><option value="Kurang Baik" ${value==='Kurang Baik'?'selected':''}>Kurang Baik</option></select></td>`; }
                     
-                    // === PERUBAHAN JS: Memperbaiki Struktur HTML untuk Kolom ID ===
                     if (header === 'ID') {
                         let actionsHTML = '';
                         if (state.userRole === 'pengawas') {
                             actionsHTML += `<button class="btn-delete" data-id="${row.ID}">Hapus</button>`;
                         }
-                        // Struktur baru: Class "actions" hanya pada div, bukan <td>
                         return `<td style="white-space: normal;">
                                     ${value}
                                     <div class="actions">${actionsHTML}</div>
@@ -672,7 +678,6 @@
             const videoEl = $('#wajah-feed'), faceStatus = $('#face-status');
             if (!state.faceApiLoaded) {
                 faceStatus.textContent = "Menunggu model AI..."; 
-                // Memuat model AI tanpa progress bar karena ini di dalam form
                 await loadFaceApiModels(0, 0, ""); 
             }
             try {
